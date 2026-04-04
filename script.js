@@ -55,8 +55,8 @@ function deriveDomain(name) {
 
 function buildProof(method, proof, date) {
   return method === "linkedin"
-    ? `cv-verify=linkedin:${proof}|${date}`
-    : `cv-verify=self:${proof}|${date}`;
+    ? `id-cv=linkedin:${proof}|${date}`
+    : `id-cv=self:${proof}|${date}`;
 }
 
 function clearTimeouts() {

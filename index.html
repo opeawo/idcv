@@ -76,7 +76,7 @@
               <span class="step-num">3</span>
               <div>
                 <h3>Registry anchors the proof</h3>
-                <p>We write an immutable <code>cv-verify</code> TXT record to your domain's DNS. You can't fake it. Nobody can alter it.</p>
+                <p>We write an immutable <code>id-cv</code> TXT record to your domain's DNS. You can't fake it. Nobody can alter it.</p>
               </div>
             </li>
             <li>
@@ -94,10 +94,10 @@
           <div class="terminal">
             <div class="terminal-header"><span>Terminal</span></div>
             <pre><span class="t-prompt">$</span> dig +short TXT johndoe.cv
-<span class="t-output">"cv-verify=linkedin:johndoe|2026-04-04"</span>
+<span class="t-output">"id-cv=linkedin:johndoe|2026-04-04"</span>
 
 <span class="t-prompt">$</span> dig +short TXT janebuilder.cv
-<span class="t-output">"cv-verify=self:0xabc123def456proof|2026-03-20"</span>
+<span class="t-output">"id-cv=self:0xabc123def456proof|2026-03-20"</span>
 
 <span class="t-prompt">$</span> curl https://id.cv/api/lookup/johndoe.cv,janebuilder.cv
 <span class="t-output">[
@@ -231,7 +231,7 @@
             <div class="card-top">
               <div>
                 <p class="label">DNS Records</p>
-                <p class="card-desc">Manage your domain's DNS records. The <code>cv-verify</code> TXT record is immutable and registry-issued.</p>
+                <p class="card-desc">Manage your domain's DNS records. The <code>id-cv</code> TXT record is immutable and registry-issued.</p>
               </div>
               <button class="btn-secondary" id="add-record-btn">+ Add record</button>
             </div>
