@@ -1,3 +1,15 @@
+/* ── Animated border property ── */
+
+@property --agent-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes agent-border-rotate {
+  to { --agent-angle: 360deg; }
+}
+
 /* ── Reset & base ── */
 
 *,
@@ -191,10 +203,23 @@ code {
   max-width: 48ch;
 }
 
+.agent-banner-active {
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--agent-angle),
+    #1062FA 0%,
+    #9532F3 40%,
+    transparent 60%,
+    transparent 80%,
+    #1062FA 100%
+  );
+  animation: agent-border-rotate 4s linear infinite;
+  border-radius: var(--radius);
+}
+
 .hero-cta {
   background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: calc(var(--radius) - 1.5px);
   padding: 28px;
   box-shadow: var(--shadow-md);
 }
@@ -1363,6 +1388,20 @@ pre.code-block {
   .header,
   .dash-header {
     padding: 12px 16px;
+  }
+
+  .nav {
+    gap: 12px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+
+  .github-label {
+    display: none;
+  }
+
+  .nav-github {
+    gap: 0;
   }
 
   .how,
