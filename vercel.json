@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/api/lookup/:domains*", "destination": "/api/lookup" }
+  ]
+}

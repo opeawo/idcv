@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "idcv"
+version = "0.1.0"
+description = "Verify .cv domain identity — resolve id-cv TXT records and validate proofs"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+dependencies = ["dnspython>=2.3"]
+keywords = ["idcv", "identity", "dns", "verification", "agent"]
+
+[project.urls]
+Homepage = "https://id.cv"
+Repository = "https://github.com/opeawo/idcv"
+
+[project.scripts]
+idcv-verify = "idcv.cli:main"

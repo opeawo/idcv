@@ -1,57 +1,119 @@
-const state = {
-  method: null,
-  name: null,
-  domain: null,
-  freeDomain: null,
-  proof: null,
-  date: "2026-04-04",
-  timeouts: [],
-};
+// ── Dashboard JS (multi-domain) ──
 
-const mockProfiles = {
-  linkedin: { name: "John Doe", proof: "johndoe" },
-  self: { name: "Jane Builder", proof: "0xabc123def456proof" },
-};
+const mockDomains = [
+  {
+    domain: "johndoe.cv",
+    method: "linkedin",
+    proof: "johndoe",
+    name: "John Doe",
+    date: "2026-04-04",
+  },
+  {
+    domain: "jd-ai.cv",
+    method: "self",
+    proof: "0xabc123def456proof",
+    name: "John Doe",
+    date: "2026-03-15",
+  },
+];
 
-// ── Sections ──
+// Load domains from session or use mocks
+let domains = JSON.parse(sessionStorage.getItem("idcv_domains") || "null") || mockDomains;
+let user = JSON.parse(sessionStorage.getItem("idcv_user") || "null") || { name: "John Doe", method: "linkedin" };
+let activeDomainIndex = 0;
 
-const landing = document.getElementById("landing");
-const overlay = document.getElementById("verify-overlay");
-const dashboard = document.getElementById("dashboard");
+// ── Init ──
 
-// ── Overlay elements ──
+function init() {
+  // User info
+  const initials = user.name.split(" ").map((w) => w[0]).join("").toUpperCase();
+  document.getElementById("dash-avatar").textContent = initials;
+  document.getElementById("dash-user-name").textContent = user.name;
 
-const vSteps = document.querySelectorAll(".v-step");
-const progressFill = document.getElementById("progress-fill");
-const verifyLog = document.getElementById("verify-log");
-const logLines = verifyLog.querySelectorAll("li");
-const dnsPreview = document.getElementById("dns-preview");
-const previewRecord = document.getElementById("preview-record");
-const confirmedName = document.getElementById("confirmed-name");
-const registeringDomain = document.getElementById("registering-domain");
+  renderDomainTabs();
+  selectDomain(0);
+}
 
-// ── Claim elements ──
+// ── Domain selector tabs ──
 
-const domainInput = document.getElementById("domain-input");
-const pricingHint = document.getElementById("pricing-hint");
-const claimBtn = document.getElementById("claim-btn");
+function renderDomainTabs() {
+  const container = document.getElementById("domain-tabs");
+  container.innerHTML = "";
+
+  domains.forEach((d, i) => {
+    const btn = document.createElement("button");
+    btn.className = "domain-tab" + (i === activeDomainIndex ? " active" : "");
+    btn.textContent = d.domain;
+    btn.addEventListener("click", () => selectDomain(i));
+    container.appendChild(btn);
+  });
+}
+
+function selectDomain(index) {
+  activeDomainIndex = index;
+  renderDomainTabs();
+  populateDashboard(domains[index]);
+}
+
+// ── Populate dashboard for selected domain ──
+
+function populateDashboard(d) {
+  const methodLabel = d.method === "linkedin" ? "LinkedIn" : "Self.xyz";
+  const proofStr = buildProof(d.method, d.proof, d.date);
+
+  // Domain card
+  document.getElementById("dash-domain").textContent = d.domain;
+  document.getElementById("dash-method").textContent = methodLabel;
+  document.getElementById("dash-date").textContent = formatDate(d.date);
+
+  // DNS records
+  populateDNSTable(d.domain, proofStr);
+
+  // Subdomains
+  populateSubdomains(d.domain);
+  document.getElementById("subdomain-tld").textContent = "." + d.domain;
+
+  // Verify more
+  const otherMethod = d.method === "linkedin" ? "self" : "linkedin";
+  const otherLabel = otherMethod === "linkedin" ? "Also verify with LinkedIn" : "Also verify with Self.xyz";
+  const otherLogo = otherMethod === "linkedin" ? "linkedinlogo.svg" : "selfxyzlogo.avif";
+  const vmBtn = document.getElementById("verify-more-btn");
+  const vmImg = vmBtn.querySelector("img");
+  vmImg.src = otherLogo;
+  vmBtn.childNodes.forEach((n) => {
+    if (n.nodeType === 3 && n.textContent.trim()) n.textContent = " " + otherLabel;
+  });
+  // Reset verify-more area
+  document.getElementById("verify-more-area").innerHTML = `
+    <button class="btn-oauth compact" id="verify-more-btn">
+      <img src="${otherLogo}" alt="${otherLabel}" />
+      ${otherLabel}
+    </button>
+  `;
+  document.getElementById("verify-more-btn").addEventListener("click", handleVerifyMore);
+
+  // Lookup
+  document.getElementById("lookup-domain").textContent = d.domain;
+  document.getElementById("lookup-method").textContent = methodLabel;
+  document.getElementById("lookup-proof").textContent = d.proof;
+
+  // Dev instructions
+  document.getElementById("dev-name").textContent = d.name;
+  ["dev-domain-1", "dev-domain-2", "dev-domain-3", "dev-domain-4", "dev-domain-5", "dev-domain-6", "dev-domain-7"].forEach(
+    (id) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = d.domain;
+    }
+  );
+  document.getElementById("dev-method").textContent = d.method;
+  document.getElementById("dev-method-2").textContent = d.method;
+  document.getElementById("dev-proof-handle").textContent = d.proof;
+  document.getElementById("dev-proof-2").textContent = d.proof;
+  document.getElementById("dev-verified-date").textContent = d.date;
+  document.getElementById("dev-date-2").textContent = d.date;
+}
 
 // ── Helpers ──
-
-function showSection(section) {
-  [landing, overlay, dashboard].forEach((s) => s.classList.add("hidden"));
-  section.classList.remove("hidden");
-}
-
-function showVStep(name) {
-  vSteps.forEach((s) => s.classList.remove("active"));
-  const target = document.querySelector(`[data-step="${name}"]`);
-  if (target) target.classList.add("active");
-}
-
-function deriveDomain(name) {
-  return name.toLowerCase().replace(/\s+/g, "");
-}
 
 function buildProof(method, proof, date) {
   return method === "linkedin"
@@ -59,183 +121,17 @@ function buildProof(method, proof, date) {
     : `id-cv=self:${proof}|${date}`;
 }
 
-function clearTimeouts() {
-  state.timeouts.forEach(clearTimeout);
-  state.timeouts = [];
+function formatDate(iso) {
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-function resetVerifyStep() {
-  logLines.forEach((li) => li.classList.remove("visible", "done"));
-  progressFill.style.width = "0%";
-  dnsPreview.classList.add("hidden");
-}
-
-// ── Landing CTA ──
-
-document.querySelectorAll("#hero-cta .btn-oauth").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    startVerification(btn.dataset.method);
-  });
-});
-
-// ── Verification flow ──
-
-function startVerification(method) {
-  state.method = method;
-  const profile = mockProfiles[method];
-  state.name = profile.name;
-  state.proof = profile.proof;
-  state.domain = deriveDomain(profile.name);
-  state.freeDomain = state.domain;
-
-  // Update text for chosen method
-  const connectText = document.querySelector('[data-line="connect"] .log-text');
-  connectText.textContent =
-    method === "linkedin" ? "Connecting to LinkedIn..." : "Connecting to Self.xyz...";
-  confirmedName.textContent = profile.name;
-  registeringDomain.textContent = state.domain + ".cv";
-
-  resetVerifyStep();
-  showSection(overlay);
-  showVStep("verify");
-
-  const schedule = [
-    { line: "connect", delay: 0, progress: 10 },
-    { line: "identity", delay: 1000, progress: 30, donePrev: "connect" },
-    { line: "confirmed", delay: 2500, progress: 50, donePrev: "identity", selfDone: true },
-    { line: "register", delay: 3500, progress: 70 },
-    { line: "dns", delay: 4200, progress: 85, donePrev: "register" },
-  ];
-
-  schedule.forEach(({ line, delay, progress, donePrev, selfDone }) => {
-    const t = setTimeout(() => {
-      if (donePrev) {
-        const prev = document.querySelector(`[data-line="${donePrev}"]`);
-        if (prev) prev.classList.add("done");
-      }
-      const el = document.querySelector(`[data-line="${line}"]`);
-      if (el) {
-        el.classList.add("visible");
-        if (selfDone) el.classList.add("done");
-      }
-      progressFill.style.width = progress + "%";
-    }, delay);
-    state.timeouts.push(t);
-  });
-
-  // Show DNS preview
-  state.timeouts.push(
-    setTimeout(() => {
-      document.querySelector('[data-line="dns"]').classList.add("done");
-      progressFill.style.width = "100%";
-      const proofStr = buildProof(method, profile.proof, state.date);
-      previewRecord.textContent = `${state.domain}.cv TXT "${proofStr}"`;
-      dnsPreview.classList.remove("hidden");
-    }, 5200)
-  );
-
-  // Auto-advance to claim
-  state.timeouts.push(
-    setTimeout(() => {
-      setupClaim();
-      showVStep("claim");
-    }, 7000)
-  );
-}
-
-// ── Claim step ──
-
-function setupClaim() {
-  domainInput.value = state.domain;
-  updateClaim();
-}
-
-function updateClaim() {
-  const val = domainInput.value.trim() || state.domain;
-  claimBtn.textContent = `Claim ${val}.cv`;
-
-  const normalized = val.toLowerCase().replace(/[^a-z0-9]/g, "");
-  if (normalized === state.freeDomain) {
-    pricingHint.textContent = "Free for your first year, then $10/year domain renewal";
-  } else {
-    pricingHint.textContent = "$10/year domain renewal";
-  }
-}
-
-domainInput.addEventListener("input", updateClaim);
-
-claimBtn.addEventListener("click", () => {
-  populateDashboard();
-  showSection(dashboard);
-  window.scrollTo({ top: 0 });
-});
-
-// ── Back buttons ──
-
-document.querySelectorAll("[data-back]").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    clearTimeouts();
-    resetVerifyStep();
-    showSection(landing);
-  });
-});
-
-// ── Dashboard population ──
-
-function populateDashboard() {
-  const domainVal = (domainInput.value.trim() || state.domain) + ".cv";
-  const methodLabel = state.method === "linkedin" ? "LinkedIn" : "Self.xyz";
-  const proofStr = buildProof(state.method, state.proof, state.date);
-  const initials = state.name.split(" ").map((w) => w[0]).join("").toUpperCase();
-
-  // Header
-  document.getElementById("dash-avatar").textContent = initials;
-  document.getElementById("dash-user-name").textContent = state.name;
-
-  // Domain card
-  document.getElementById("dash-domain").textContent = domainVal;
-  document.getElementById("dash-method").textContent = methodLabel;
-  document.getElementById("dash-date").textContent = "Apr 4, 2026";
-
-  // DNS records
-  populateDNSTable(domainVal, proofStr);
-
-  // Subdomains
-  populateSubdomains(domainVal);
-  document.getElementById("subdomain-tld").textContent = "." + domainVal;
-
-  // Verify more
-  const otherMethod = state.method === "linkedin" ? "self" : "linkedin";
-  const otherLabel = otherMethod === "linkedin" ? "Also verify with LinkedIn" : "Also verify with Self.xyz";
-  const otherLogo = otherMethod === "linkedin" ? "linkedinlogo.svg" : "selfxyzlogo.avif";
-  const vmBtn = document.getElementById("verify-more-btn");
-  vmBtn.querySelector("span") && (vmBtn.lastChild.textContent = otherLabel);
-  // Fix: the btn has img + text node
-  const vmImg = vmBtn.querySelector("img");
-  vmImg.src = otherLogo;
-  vmBtn.childNodes.forEach((n) => {
-    if (n.nodeType === 3 && n.textContent.trim()) n.textContent = " " + otherLabel;
-  });
-
-  // Lookup
-  document.getElementById("lookup-domain").textContent = domainVal;
-  document.getElementById("lookup-method").textContent = methodLabel;
-  document.getElementById("lookup-proof").textContent = state.proof;
-
-  // Dev instructions
-  document.getElementById("dev-name").textContent = state.name;
-  ["dev-domain-1", "dev-domain-2", "dev-domain-3", "dev-domain-4", "dev-domain-5", "dev-domain-6", "dev-domain-7"].forEach(
-    (id) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = domainVal;
-    }
-  );
-  document.getElementById("dev-method").textContent = state.method;
-  document.getElementById("dev-method-2").textContent = state.method;
-  document.getElementById("dev-proof-handle").textContent = state.proof;
-  document.getElementById("dev-proof-2").textContent = state.proof;
-  document.getElementById("dev-verified-date").textContent = state.date;
-  document.getElementById("dev-date-2").textContent = state.date;
+function handleVerifyMore() {
+  const d = domains[activeDomainIndex];
+  const otherMethod = d.method === "linkedin" ? "Self.xyz" : "LinkedIn";
+  document.getElementById("verify-more-area").innerHTML = `
+    <div class="verify-more-done">&#10003; Verified with ${otherMethod}</div>
+  `;
 }
 
 // ── DNS table ──
@@ -290,7 +186,6 @@ function renderDNSTable() {
     tbody.appendChild(tr);
   });
 
-  // Delete handlers
   tbody.querySelectorAll(".delete-record").forEach((btn) => {
     btn.addEventListener("click", () => {
       const idx = parseInt(btn.dataset.index, 10);
@@ -397,7 +292,6 @@ saveSubdomainBtn.addEventListener("click", () => {
   subdomains.push({ name, desc, status: "Active" });
   renderSubdomains(domain);
 
-  // Also add an A record for the new subdomain
   dnsRecords.push({ type: "A", name, value: "76.76.21.21", ttl: "3600", editable: true });
   renderDNSTable();
 
@@ -407,42 +301,14 @@ saveSubdomainBtn.addEventListener("click", () => {
   addSubdomainBtn.classList.remove("hidden");
 });
 
-// ── Verify more ──
-
-document.getElementById("verify-more-btn").addEventListener("click", () => {
-  const otherMethod = state.method === "linkedin" ? "Self.xyz" : "LinkedIn";
-  document.getElementById("verify-more-area").innerHTML = `
-    <div class="verify-more-done">&#10003; Verified with ${otherMethod}</div>
-  `;
-});
-
 // ── Logout ──
 
 document.getElementById("logout-btn").addEventListener("click", () => {
-  clearTimeouts();
-  resetVerifyStep();
-  showSection(landing);
+  sessionStorage.removeItem("idcv_user");
+  sessionStorage.removeItem("idcv_domains");
+  window.location.href = "/";
 });
 
-// ── Dark mode toggle ──
+// ── Start ──
 
-(function initTheme() {
-  const saved = localStorage.getItem("theme");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const theme = saved || (prefersDark ? "dark" : "light");
-  document.documentElement.setAttribute("data-theme", theme);
-  updateToggleIcon(theme);
-})();
-
-function updateToggleIcon(theme) {
-  const btn = document.getElementById("theme-toggle");
-  if (btn) btn.textContent = theme === "dark" ? "\u2600" : "\u263D";
-}
-
-document.getElementById("theme-toggle").addEventListener("click", () => {
-  const current = document.documentElement.getAttribute("data-theme");
-  const next = current === "dark" ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", next);
-  localStorage.setItem("theme", next);
-  updateToggleIcon(next);
-});
+init();

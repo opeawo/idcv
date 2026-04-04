@@ -15,85 +15,87 @@
   </head>
   <body>
     <div class="page">
-
-      <!-- ─── Landing ─── -->
-      <div id="landing">
-        <header class="header">
-          <a class="logo" href="/">
-            <span class="logo-mark">id</span>
-            id.cv
+      <header class="header">
+        <a class="logo" href="/">
+          <span class="logo-mark">id</span>
+          id.cv
+        </a>
+        <nav class="nav">
+          <a href="#how">How it works</a>
+          <a href="#pricing">Pricing</a>
+          <a href="https://github.com/opeawo/idcv" class="nav-github" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            Open source
           </a>
-          <nav class="nav">
-            <a href="#how">How it works</a>
-            <a href="#pricing">Pricing</a>
-            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">&#9789;</button>
-          </nav>
-        </header>
+          <a href="login.html" class="nav-login">Log in</a>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">&#9789;</button>
+        </nav>
+      </header>
 
-        <section class="hero">
-          <div class="hero-content">
-            <p class="kicker">Open protocol for agent identity</p>
-            <h1>Every agent should trace back to a real human.</h1>
-            <p class="hero-body">
-              id.cv anchors agent identity to a verified <strong>.cv</strong> domain.
-              One DNS lookup proves who's behind any agent &mdash; no platform, no API, no middleman.
-            </p>
+      <section class="hero">
+        <div class="hero-content">
+          <p class="kicker">Open protocol for agent identity</p>
+          <h1>Every agent should trace back to a real human.</h1>
+          <p class="hero-body">
+            id.cv anchors agent identity to a verified <strong>.cv</strong> domain.
+            One DNS lookup proves who's behind any agent &mdash; no platform, no API, no middleman.
+          </p>
+        </div>
+        <div class="hero-cta">
+          <p class="cta-label">Get your verified domain</p>
+          <div class="cta-buttons">
+            <a class="btn-oauth" href="verify.html">
+              <img src="linkedinlogo.svg" alt="LinkedIn" />
+              Verify with LinkedIn
+            </a>
+            <a class="btn-oauth" href="verify.html">
+              <img src="selfxyzlogo.avif" alt="Self.xyz" />
+              Verify with Self.xyz
+            </a>
           </div>
-          <div class="hero-cta" id="hero-cta">
-            <p class="cta-label">Get your verified domain</p>
-            <div class="cta-buttons">
-              <button class="btn-oauth" data-method="linkedin">
-                <img src="linkedinlogo.svg" alt="LinkedIn" />
-                Verify with LinkedIn
-              </button>
-              <button class="btn-oauth" data-method="self">
-                <img src="selfxyzlogo.avif" alt="Self.xyz" />
-                Verify with Self.xyz
-              </button>
+          <p class="cta-note">Free <code>firstnamelastname.cv</code> for your first year, then $10/year domain renewal</p>
+        </div>
+      </section>
+
+      <section class="how" id="how">
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li>
+            <span class="step-num">1</span>
+            <div>
+              <h3>Verify your identity</h3>
+              <p>Authenticate with LinkedIn or generate a zero-knowledge proof via Self.xyz. No personal data stored.</p>
             </div>
-            <p class="cta-note">Free <code>firstnamelastname.cv</code> for your first year, then $10/year domain renewal</p>
-          </div>
-        </section>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <div>
+              <h3>Claim your .cv domain</h3>
+              <p>Your name becomes your domain. <code>johndoe.cv</code> is yours &mdash; free for your first year. Registration completes in about 30 minutes.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <div>
+              <h3>Registry anchors the proof</h3>
+              <p>We write an immutable <code>id-cv</code> TXT record to your domain's DNS. You can't fake it. Nobody can alter it.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">4</span>
+            <div>
+              <h3>Agents inherit trust</h3>
+              <p>Every subdomain &mdash; <code>assistant.johndoe.cv</code>, <code>research.johndoe.cv</code> &mdash; traces back to you.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
 
-        <section class="how" id="how">
-          <h2>How it works</h2>
-          <ol class="steps">
-            <li>
-              <span class="step-num">1</span>
-              <div>
-                <h3>Verify your identity</h3>
-                <p>Authenticate with LinkedIn or generate a zero-knowledge proof via Self.xyz. No personal data stored.</p>
-              </div>
-            </li>
-            <li>
-              <span class="step-num">2</span>
-              <div>
-                <h3>Claim your .cv domain</h3>
-                <p>Your name becomes your domain. <code>johndoe.cv</code> is yours &mdash; free for your first year. Registration completes in about 30 minutes.</p>
-              </div>
-            </li>
-            <li>
-              <span class="step-num">3</span>
-              <div>
-                <h3>Registry anchors the proof</h3>
-                <p>We write an immutable <code>id-cv</code> TXT record to your domain's DNS. You can't fake it. Nobody can alter it.</p>
-              </div>
-            </li>
-            <li>
-              <span class="step-num">4</span>
-              <div>
-                <h3>Agents inherit trust</h3>
-                <p>Every subdomain &mdash; <code>assistant.johndoe.cv</code>, <code>research.johndoe.cv</code> &mdash; traces back to you.</p>
-              </div>
-            </li>
-          </ol>
-        </section>
-
-        <section class="proof-example">
-          <p class="kicker">Anyone can verify</p>
-          <div class="terminal">
-            <div class="terminal-header"><span>Terminal</span></div>
-            <pre><span class="t-prompt">$</span> dig +short TXT johndoe.cv
+      <section class="proof-example">
+        <p class="kicker">Anyone can verify</p>
+        <div class="terminal">
+          <div class="terminal-header"><span>Terminal</span></div>
+          <pre><span class="t-prompt">$</span> dig +short TXT johndoe.cv
 <span class="t-output">"id-cv=linkedin:johndoe|2026-04-04"</span>
 
 <span class="t-prompt">$</span> dig +short TXT janebuilder.cv
@@ -116,327 +118,74 @@
     "status": "verified"
   }
 ]</span></pre>
-          </div>
-        </section>
+        </div>
+      </section>
 
-        <section class="pricing" id="pricing">
-          <h2>Pricing</h2>
-          <div class="pricing-grid">
-            <div class="price-card featured">
-              <h3>Free</h3>
-              <p class="price">$0 <span>/ first year</span></p>
-              <p class="price-renew">Then $10/year domain renewal</p>
-              <ul>
-                <li><code>firstnamelastname.cv</code> domain</li>
-                <li>Identity verification included</li>
-                <li>Immutable DNS proof</li>
-                <li>Unlimited subdomains</li>
-              </ul>
-            </div>
-            <div class="price-card">
-              <h3>Enterprise</h3>
-              <p class="price">Contact us</p>
-              <ul>
-                <li>Bulk domain issuance</li>
-                <li>Org-level verification</li>
-                <li>Centralized identity control</li>
-                <li>Unlimited subdomains</li>
-              </ul>
+      <!-- Agent onboarding -->
+      <section class="agent-onboard" id="agents">
+        <h2>Send your AI agent to id.cv</h2>
+        <p class="agent-onboard-sub">Your agent can register a .cv domain on your behalf. You just verify ownership.</p>
+        <div class="agent-steps">
+          <div class="agent-step">
+            <span class="step-num">1</span>
+            <div>
+              <h3>Send this to your agent</h3>
+              <div class="copy-block">
+                <code id="agent-instruction">Read https://id.cv/skill.md and follow the instructions to register a .cv domain for me</code>
+                <button class="copy-btn" onclick="copyText(document.getElementById('agent-instruction').textContent, this)">Copy</button>
+              </div>
+              <p class="hint">Works with Claude, Cursor, Windsurf, ChatGPT, and any agent that can read URLs.</p>
             </div>
           </div>
-        </section>
-
-        <footer class="footer">
-          <span class="logo-mark small">id</span>
-          <span>id.cv &mdash; Open protocol for agent reputation and human identity</span>
-        </footer>
-      </div>
-
-      <!-- ─── Verification overlay (steps 2-3) ─── -->
-      <div id="verify-overlay" class="overlay hidden">
-        <div class="overlay-card">
-
-          <!-- Step: Verifying -->
-          <div class="v-step active" data-step="verify">
-            <button class="back-link" data-back="landing">&larr; Back</button>
-            <div class="progress-bar">
-              <div class="progress-fill" id="progress-fill"></div>
+          <div class="agent-step">
+            <span class="step-num">2</span>
+            <div>
+              <h3>Agent registers your domain</h3>
+              <p>Your agent reads <a href="skill.md">skill.md</a>, installs the CLI, and registers <code>yourname.cv</code> for you.</p>
             </div>
-            <ul class="verify-log" id="verify-log">
-              <li data-line="connect"><span class="spinner"></span> <span class="log-text">Connecting to LinkedIn...</span></li>
-              <li data-line="identity"><span class="spinner"></span> <span class="log-text">Verifying identity...</span></li>
-              <li data-line="confirmed"><span class="icon-check">&#10003;</span> <span class="log-text">Identity confirmed: <strong id="confirmed-name">John Doe</strong></span></li>
-              <li data-line="register"><span class="spinner"></span> <span class="log-text">Registering <code id="registering-domain">johndoe.cv</code>...</span></li>
-              <li data-line="dns"><span class="spinner"></span> <span class="log-text">Writing verification proof to DNS...</span></li>
+          </div>
+          <div class="agent-step">
+            <span class="step-num">3</span>
+            <div>
+              <h3>Verify ownership</h3>
+              <p>Your agent sends you a verification link. Click it, verify with LinkedIn or Self.xyz, and you're done.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pricing" id="pricing">
+        <h2>Pricing</h2>
+        <div class="pricing-grid">
+          <div class="price-card featured">
+            <h3>Free</h3>
+            <p class="price">$0 <span>/ first year</span></p>
+            <p class="price-renew">Then $10/year domain renewal</p>
+            <ul>
+              <li><code>firstnamelastname.cv</code> domain</li>
+              <li>Identity verification included</li>
+              <li>Immutable DNS proof</li>
+              <li>Unlimited subdomains</li>
             </ul>
-            <div class="dns-preview hidden" id="dns-preview">
-              <p class="label">TXT record written</p>
-              <pre class="code-block" id="preview-record"></pre>
-              <p class="hint">Domain registration typically completes within 30 minutes. Your proof will be publicly queryable via DNS once propagation is complete.</p>
-            </div>
           </div>
-
-          <!-- Step: Claim domain -->
-          <div class="v-step" data-step="claim">
-            <button class="back-link" data-back="landing">&larr; Start over</button>
-            <div class="check-circle">&#10003;</div>
-            <h2>You're verified</h2>
-            <p class="claim-sub">Claim your domain below. Edit it if you want a custom name.</p>
-            <div class="domain-input-wrap">
-              <input type="text" id="domain-input" value="johndoe" spellcheck="false" />
-              <span class="domain-tld">.cv</span>
-            </div>
-            <p class="pricing-hint" id="pricing-hint">Free for your first year, then $10/year domain renewal</p>
-            <button class="btn-primary" id="claim-btn">Claim johndoe.cv</button>
+          <div class="price-card">
+            <h3>Enterprise</h3>
+            <p class="price">Contact us</p>
+            <ul>
+              <li>Bulk domain issuance</li>
+              <li>Org-level verification</li>
+              <li>Centralized identity control</li>
+              <li>Unlimited subdomains</li>
+            </ul>
           </div>
-
         </div>
-      </div>
+      </section>
 
-      <!-- ─── Dashboard ─── -->
-      <div id="dashboard" class="hidden">
-        <header class="dash-header">
-          <a class="logo" href="/">
-            <span class="logo-mark">id</span>
-            id.cv
-          </a>
-          <div class="dash-user">
-            <div class="avatar" id="dash-avatar">JD</div>
-            <span id="dash-user-name">John Doe</span>
-            <button class="text-btn" id="logout-btn">Log out</button>
-          </div>
-        </header>
-
-        <div class="dash-body">
-          <!-- Domain overview -->
-          <section class="card domain-card">
-            <div class="card-top">
-              <div>
-                <p class="label">Domain</p>
-                <h2 class="domain-name" id="dash-domain">johndoe.cv</h2>
-              </div>
-              <div class="badges">
-                <span class="badge badge-green" id="dash-status">Verified</span>
-              </div>
-            </div>
-            <div class="domain-meta">
-              <span><strong>Method:</strong> <span id="dash-method">LinkedIn</span></span>
-              <span><strong>Verified:</strong> <span id="dash-date">Apr 4, 2026</span></span>
-              <span><strong>Expires:</strong> Apr 4, 2027</span>
-            </div>
-          </section>
-
-          <!-- DNS Management -->
-          <section class="card">
-            <div class="card-top">
-              <div>
-                <p class="label">DNS Records</p>
-                <p class="card-desc">Manage your domain's DNS records. The <code>id-cv</code> TXT record is immutable and registry-issued.</p>
-              </div>
-              <button class="btn-secondary" id="add-record-btn">+ Add record</button>
-            </div>
-
-            <!-- Add record form (hidden) -->
-            <div class="add-record-form hidden" id="add-record-form">
-              <div class="form-row">
-                <label>
-                  Type
-                  <select id="new-record-type">
-                    <option value="A">A</option>
-                    <option value="AAAA">AAAA</option>
-                    <option value="CNAME">CNAME</option>
-                    <option value="TXT">TXT</option>
-                    <option value="MX">MX</option>
-                  </select>
-                </label>
-                <label>
-                  Name
-                  <input type="text" id="new-record-name" placeholder="@ or subdomain" />
-                </label>
-                <label class="grow">
-                  Value
-                  <input type="text" id="new-record-value" placeholder="Record value" />
-                </label>
-                <label>
-                  TTL
-                  <select id="new-record-ttl">
-                    <option value="300">5 min</option>
-                    <option value="3600" selected>1 hour</option>
-                    <option value="86400">1 day</option>
-                  </select>
-                </label>
-              </div>
-              <div class="form-actions">
-                <button class="btn-primary small" id="save-record-btn">Add record</button>
-                <button class="btn-ghost small" id="cancel-record-btn">Cancel</button>
-              </div>
-            </div>
-
-            <table class="dns-table" id="dns-table">
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Name</th>
-                  <th>Value</th>
-                  <th>TTL</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="dns-tbody">
-                <!-- Populated by JS -->
-              </tbody>
-            </table>
-          </section>
-
-          <!-- Agent subdomains -->
-          <section class="card">
-            <div class="card-top">
-              <div>
-                <p class="label">Agent subdomains</p>
-                <p class="card-desc">All subdomains inherit your verified identity. Point them wherever your agents live.</p>
-              </div>
-              <button class="btn-secondary" id="add-subdomain-btn">+ Add subdomain</button>
-            </div>
-            <div class="add-subdomain-form hidden" id="add-subdomain-form">
-              <div class="form-row">
-                <label>
-                  Subdomain
-                  <div class="domain-input-wrap compact">
-                    <input type="text" id="new-subdomain-name" placeholder="agent-name" spellcheck="false" />
-                    <span class="domain-tld" id="subdomain-tld">.johndoe.cv</span>
-                  </div>
-                </label>
-                <label>
-                  Description
-                  <input type="text" id="new-subdomain-desc" placeholder="e.g. Trading agent" />
-                </label>
-              </div>
-              <div class="form-actions">
-                <button class="btn-primary small" id="save-subdomain-btn">Add</button>
-                <button class="btn-ghost small" id="cancel-subdomain-btn">Cancel</button>
-              </div>
-            </div>
-            <table class="dns-table" id="subdomain-table">
-              <thead>
-                <tr>
-                  <th>Subdomain</th>
-                  <th>Description</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="subdomain-tbody">
-                <!-- Populated by JS -->
-              </tbody>
-            </table>
-          </section>
-
-          <!-- Additional verification -->
-          <section class="card">
-            <p class="label">Additional verification</p>
-            <p class="card-desc">Stack multiple proofs on the same domain for stronger trust.</p>
-            <div id="verify-more-area">
-              <button class="btn-oauth compact" id="verify-more-btn">
-                <img src="selfxyzlogo.avif" alt="Self.xyz" />
-                Also verify with Self.xyz
-              </button>
-            </div>
-          </section>
-
-          <!-- Public lookup -->
-          <section class="card">
-            <p class="label">Public verification lookup</p>
-            <p class="card-desc">What anyone sees when they query your domain via DNS.</p>
-            <div class="lookup-grid">
-              <dl>
-                <dt>Domain</dt>
-                <dd id="lookup-domain">johndoe.cv</dd>
-              </dl>
-              <dl>
-                <dt>Method</dt>
-                <dd id="lookup-method">LinkedIn</dd>
-              </dl>
-              <dl>
-                <dt>Proof</dt>
-                <dd class="mono-sm" id="lookup-proof">johndoe</dd>
-              </dl>
-              <dl>
-                <dt>Status</dt>
-                <dd class="text-green" id="lookup-status">Verified</dd>
-              </dl>
-            </div>
-          </section>
-
-          <!-- Developer instructions -->
-          <section class="card">
-            <p class="label">For developers &amp; agents</p>
-            <div class="dev-cols">
-              <div>
-                <h3>Register &amp; verify via terminal</h3>
-                <pre class="code-block"><span class="comment"># Install the id.cv CLI</span>
-npm install -g @id/cv
-
-<span class="comment"># Register your domain</span>
-idcv register --name "<span id="dev-name">John Doe</span>"
-
-<span class="comment"># Verify via LinkedIn</span>
-idcv verify --method linkedin
-
-<span class="comment"># Verify via Self.xyz</span>
-idcv verify --method self
-
-<span class="comment"># Check verification status</span>
-idcv status <span id="dev-domain-1">johndoe.cv</span>
-
-<span class="comment"># Lookup any .cv domain</span>
-dig +short TXT <span id="dev-domain-2">johndoe.cv</span></pre>
-                <p class="hint">Works in any terminal, IDE, or agent environment.</p>
-              </div>
-              <div>
-                <h3>Use in your agent / MCP server</h3>
-                <pre class="code-block"><span class="comment"># Verify an agent's identity</span>
-dig +short TXT agent.<span id="dev-domain-3">johndoe.cv</span>
-
-<span class="comment"># Single domain lookup</span>
-curl https://id.cv/api/lookup/<span id="dev-domain-4">johndoe.cv</span>
-
-<span class="comment"># Response</span>
-{
-  "domain": "<span id="dev-domain-5">johndoe.cv</span>",
-  "method": "<span id="dev-method">linkedin</span>",
-  "proof": "<span id="dev-proof-handle">johndoe</span>",
-  "verified": "<span id="dev-verified-date">2026-04-04</span>",
-  "status": "verified"
-}
-
-<span class="comment"># Multi-domain lookup</span>
-curl https://id.cv/api/lookup/<span id="dev-domain-6">johndoe.cv</span>,janebuilder.cv
-
-<span class="comment"># Response</span>
-[
-  {
-    "domain": "<span id="dev-domain-7">johndoe.cv</span>",
-    "method": "<span id="dev-method-2">linkedin</span>",
-    "proof": "<span id="dev-proof-2">johndoe</span>",
-    "verified": "<span id="dev-date-2">2026-04-04</span>",
-    "status": "verified"
-  },
-  {
-    "domain": "janebuilder.cv",
-    "method": "self",
-    "proof": "0xabc123def456proof",
-    "verified": "2026-03-20",
-    "status": "verified"
-  }
-]</pre>
-              </div>
-            </div>
-          </section>
-
-        </div>
-      </div>
-
+      <footer class="footer">
+        <span class="logo-mark small">id</span>
+        <span>id.cv &mdash; Open protocol for agent reputation and human identity</span>
+      </footer>
     </div>
-    <script src="script.js"></script>
+    <script src="shared.js"></script>
   </body>
 </html>

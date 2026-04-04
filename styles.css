@@ -137,6 +137,7 @@ code {
 
 .nav {
   display: flex;
+  align-items: center;
   gap: 24px;
 }
 
@@ -577,26 +578,66 @@ code {
   color: var(--text);
 }
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
+/* ── Centered flow (login, verify pages) ── */
+
+.centered-flow {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
-  padding: 20px;
+  min-height: calc(100vh - 200px);
+  padding: 40px 20px;
 }
 
-.overlay-card {
+.flow-card {
   background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
   padding: 32px;
   width: min(460px, 100%);
-  max-height: 90vh;
-  overflow-y: auto;
+}
+
+.flow-heading {
+  font-family: var(--heading);
+  font-size: 2rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.flow-sub {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin-bottom: 20px;
+}
+
+.flow-note {
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.flow-note a {
+  color: var(--blue);
+  font-weight: 600;
+}
+
+/* ── Nav login link ── */
+
+.nav-login {
+  font-weight: 600;
+  color: var(--blue) !important;
+}
+
+.nav-github {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-github svg {
+  flex-shrink: 0;
 }
 
 .v-step {
@@ -1127,6 +1168,145 @@ pre.code-block {
   font-weight: 600;
 }
 
+/* ── Domain selector ── */
+
+.domain-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.domain-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.domain-tab {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 150ms, color 150ms, background 150ms;
+}
+
+.domain-tab:hover {
+  border-color: var(--text-tertiary);
+  color: var(--text);
+}
+
+.domain-tab.active {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+/* ── Agent onboarding ── */
+
+.agent-onboard {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 60px 0;
+  border-top: 1px solid var(--border);
+}
+
+.agent-onboard h2 {
+  font-family: var(--heading);
+  font-size: 2.2rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.agent-onboard-sub {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-bottom: 32px;
+}
+
+.agent-steps {
+  display: grid;
+  gap: 24px;
+}
+
+.agent-step {
+  display: flex;
+  gap: 16px;
+}
+
+.agent-step h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.agent-step p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.copy-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 8px;
+}
+
+.copy-block code {
+  flex: 1;
+  background: none;
+  padding: 0;
+  color: var(--code-text);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-tertiary);
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 150ms, border-color 150ms;
+}
+
+.copy-btn:hover {
+  color: var(--text);
+  border-color: rgba(255,255,255,0.3);
+}
+
+/* ── Dashboard footer ── */
+
+.dash-footer {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ── DNS preview code block (inline) ── */
+
+.dns-code {
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+}
+
 /* ── Responsive ── */
 
 @media (max-width: 768px) {
@@ -1165,9 +1345,19 @@ pre.code-block {
     font-size: 0.9rem;
   }
 
-  .overlay {
+  .centered-flow {
+    min-height: auto;
+    padding: 40px 16px;
+  }
+
+  .agent-onboard {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .domain-selector {
+    flex-direction: column;
     align-items: flex-start;
-    padding-top: 60px;
   }
 
   .header,

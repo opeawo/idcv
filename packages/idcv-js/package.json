@@ -1,0 +1,22 @@
+{
+  "name": "@idcv/verify",
+  "version": "0.1.0",
+  "description": "Verify .cv domain identity — resolve id-cv TXT records and validate proofs",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./index.js",
+      "import": "./index.mjs"
+    }
+  },
+  "keywords": ["idcv", "identity", "dns", "verification", "agent"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opeawo/idcv"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

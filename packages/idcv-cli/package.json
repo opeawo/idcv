@@ -1,0 +1,17 @@
+{
+  "name": "idcv",
+  "version": "0.1.0",
+  "description": "CLI tool to verify .cv domain identity",
+  "bin": {
+    "idcv": "./bin/idcv.js"
+  },
+  "keywords": ["idcv", "identity", "dns", "verification", "agent", "cli"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opeawo/idcv"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
