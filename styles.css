@@ -129,22 +129,27 @@ code {
   text-decoration: none;
 }
 
-.logo-mark {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: var(--text);
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 800;
+/* Theme-aware logo images */
+.logo-img {
+  height: 32px;
+  width: auto;
 }
 
-.logo-mark.small {
-  width: 24px;
-  height: 24px;
-  font-size: 0.7rem;
+.logo-dark {
+  display: none;
+}
+
+[data-theme="dark"] .logo-light {
+  display: none;
+}
+
+[data-theme="dark"] .logo-dark {
+  display: inline-block;
+}
+
+.footer-logo {
+  height: 20px;
+  width: auto;
 }
 
 .nav {
@@ -235,8 +240,25 @@ code {
   gap: 12px;
 }
 
+.cta-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+
+.cta-agent-line {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.cta-agent-line a {
+  font-weight: 500;
+  font-size: 0.82rem;
+}
+
 .cta-note {
-  margin-top: 16px;
   font-size: 0.82rem;
   color: var(--text-tertiary);
   text-align: center;
@@ -1193,43 +1215,217 @@ pre.code-block {
   font-weight: 600;
 }
 
-/* ── Domain selector ── */
+/* ── View header ── */
 
-.domain-selector {
+.view-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.view-header-left {
+  display: flex;
+  align-items: center;
   gap: 12px;
 }
 
-.domain-tabs {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+.view-title {
+  font-family: var(--heading);
+  font-size: 2rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  margin-bottom: 4px;
 }
 
-.domain-tab {
-  padding: 8px 16px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--bg-card);
-  color: var(--text-secondary);
+.view-title.mono {
   font-family: var(--mono);
+  text-transform: none;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.view-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 150ms;
+  flex-shrink: 0;
+}
+
+.btn-back:hover {
+  border-color: var(--text-tertiary);
+  text-decoration: none;
+}
+
+/* ── Domain grid ── */
+
+.domain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.domain-grid-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 200ms, box-shadow 200ms;
+}
+
+.domain-grid-card:hover {
+  border-color: var(--blue);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  text-decoration: none;
+}
+
+.dgc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.dgc-domain {
+  font-family: var(--mono);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.dgc-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.dgc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+
+.dgc-subs {
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+}
+
+.dgc-arrow {
+  color: var(--blue);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* ── Expires + Renew ── */
+
+.expires-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-renew {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid var(--blue);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--blue);
+  font: inherit;
+  font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
-  transition: border-color 150ms, color 150ms, background 150ms;
+  transition: background 150ms, color 150ms;
 }
 
-.domain-tab:hover {
-  border-color: var(--text-tertiary);
+.btn-renew:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* ── Renew modal ── */
+
+.renew-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.renew-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+}
+
+.renew-modal-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  margin: 16px;
+}
+
+.renew-modal-content h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.renew-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.renew-label select {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.92rem;
   color: var(--text);
+  background: var(--input-bg);
 }
 
-.domain-tab.active {
-  background: var(--text);
-  color: var(--bg);
-  border-color: var(--text);
+.renew-summary {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
 }
 
 /* ── Agent onboarding ── */
@@ -1380,9 +1576,14 @@ pre.code-block {
     padding-right: 16px;
   }
 
-  .domain-selector {
+  .domain-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .view-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
   }
 
   .header,
@@ -1454,4 +1655,155 @@ pre.code-block {
   .lookup-grid {
     grid-template-columns: 1fr;
   }
+
+  .manifesto-hero h1 {
+    font-size: 2rem;
+  }
+
+  .manifesto-body {
+    font-size: 1rem;
+  }
+
+  .manifesto-table-wrap {
+    overflow-x: auto;
+  }
+}
+
+/* ── Manifesto ── */
+
+.manifesto {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 0 60px;
+}
+
+.manifesto-hero {
+  padding: 60px 0 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+
+.manifesto-hero .kicker {
+  margin-bottom: 16px;
+}
+
+.manifesto-hero h1 {
+  font-family: var(--heading);
+  font-size: 3rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.manifesto-body {
+  font-size: 1.08rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.manifesto-body p {
+  margin-bottom: 20px;
+}
+
+.manifesto-lede {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.manifesto-body h2 {
+  font-family: var(--heading);
+  font-size: 2rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  margin: 48px 0 16px;
+  letter-spacing: 0.02em;
+}
+
+.manifesto-rule {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 48px 0;
+}
+
+.manifesto-reason {
+  margin-bottom: 32px;
+}
+
+.manifesto-reason h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.reason-num {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--blue);
+  flex-shrink: 0;
+}
+
+.manifesto-reason p {
+  margin-bottom: 0;
+}
+
+.manifesto-table-wrap {
+  margin: 24px 0;
+}
+
+.manifesto-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.manifesto-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.manifesto-table tr:last-child td {
+  border-bottom: none;
+}
+
+.manifesto-table td:first-child {
+  width: 180px;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+.manifesto-table td:last-child {
+  color: var(--text-secondary);
+}
+
+.manifesto-quote {
+  border-left: 3px solid var(--blue);
+  padding: 16px 24px;
+  margin: 32px 0;
+  background: var(--bg-form);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.manifesto-quote p {
+  margin-bottom: 0;
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.manifesto-closing {
+  font-size: 1.15rem;
+  margin-top: 32px;
+}
+
+.manifesto-cta {
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+  text-align: center;
 }

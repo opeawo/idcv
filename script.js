@@ -1,4 +1,4 @@
-// ── Dashboard JS (multi-domain) ──
+// ── Domain Detail JS ──
 
 const mockDomains = [
   {
@@ -17,54 +17,54 @@ const mockDomains = [
   },
 ];
 
-// Load domains from session or use mocks
+// Get domain index from URL
+const params = new URLSearchParams(window.location.search);
+const domainIndex = parseInt(params.get("d") || "0", 10);
+
 let domains = JSON.parse(sessionStorage.getItem("idcv_domains") || "null") || mockDomains;
 let user = JSON.parse(sessionStorage.getItem("idcv_user") || "null") || { name: "John Doe", method: "linkedin" };
-let activeDomainIndex = 0;
+let currentDomain = domains[domainIndex] || domains[0];
 
 // ── Init ──
 
 function init() {
-  // User info
   const initials = user.name.split(" ").map((w) => w[0]).join("").toUpperCase();
   document.getElementById("dash-avatar").textContent = initials;
   document.getElementById("dash-user-name").textContent = user.name;
-
-  renderDomainTabs();
-  selectDomain(0);
+  populateDashboard(currentDomain);
 }
 
-// ── Domain selector tabs ──
+// ── Helpers ──
 
-function renderDomainTabs() {
-  const container = document.getElementById("domain-tabs");
-  container.innerHTML = "";
-
-  domains.forEach((d, i) => {
-    const btn = document.createElement("button");
-    btn.className = "domain-tab" + (i === activeDomainIndex ? " active" : "");
-    btn.textContent = d.domain;
-    btn.addEventListener("click", () => selectDomain(i));
-    container.appendChild(btn);
-  });
+function buildProof(method, proof, date) {
+  return `id-cv=${method}:${proof}|${date}`;
 }
 
-function selectDomain(index) {
-  activeDomainIndex = index;
-  renderDomainTabs();
-  populateDashboard(domains[index]);
+function formatDate(iso) {
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-// ── Populate dashboard for selected domain ──
+function getExpiry(iso) {
+  const d = new Date(iso + "T00:00:00");
+  d.setFullYear(d.getFullYear() + 1);
+  return d;
+}
+
+// ── Populate ──
 
 function populateDashboard(d) {
   const methodLabel = d.method === "linkedin" ? "LinkedIn" : "Self.xyz";
   const proofStr = buildProof(d.method, d.proof, d.date);
+  const expiry = d.expiry ? new Date(d.expiry + "T00:00:00") : getExpiry(d.date);
 
-  // Domain card
+  document.title = d.domain + " | id.cv";
+
+  // Domain header
   document.getElementById("dash-domain").textContent = d.domain;
   document.getElementById("dash-method").textContent = methodLabel;
   document.getElementById("dash-date").textContent = formatDate(d.date);
+  document.getElementById("dash-expires").textContent = expiry.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
   // DNS records
   populateDNSTable(d.domain, proofStr);
@@ -77,13 +77,6 @@ function populateDashboard(d) {
   const otherMethod = d.method === "linkedin" ? "self" : "linkedin";
   const otherLabel = otherMethod === "linkedin" ? "Also verify with LinkedIn" : "Also verify with Self.xyz";
   const otherLogo = otherMethod === "linkedin" ? "linkedinlogo.svg" : "selfxyzlogo.avif";
-  const vmBtn = document.getElementById("verify-more-btn");
-  const vmImg = vmBtn.querySelector("img");
-  vmImg.src = otherLogo;
-  vmBtn.childNodes.forEach((n) => {
-    if (n.nodeType === 3 && n.textContent.trim()) n.textContent = " " + otherLabel;
-  });
-  // Reset verify-more area
   document.getElementById("verify-more-area").innerHTML = `
     <button class="btn-oauth compact" id="verify-more-btn">
       <img src="${otherLogo}" alt="${otherLabel}" />
@@ -111,27 +104,63 @@ function populateDashboard(d) {
   document.getElementById("dev-proof-2").textContent = d.proof;
   document.getElementById("dev-verified-date").textContent = d.date;
   document.getElementById("dev-date-2").textContent = d.date;
-}
 
-// ── Helpers ──
-
-function buildProof(method, proof, date) {
-  return method === "linkedin"
-    ? `id-cv=linkedin:${proof}|${date}`
-    : `id-cv=self:${proof}|${date}`;
-}
-
-function formatDate(iso) {
-  const d = new Date(iso + "T00:00:00");
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  // Renew modal setup
+  setupRenew(d, expiry);
 }
 
 function handleVerifyMore() {
-  const d = domains[activeDomainIndex];
-  const otherMethod = d.method === "linkedin" ? "Self.xyz" : "LinkedIn";
+  const otherMethod = currentDomain.method === "linkedin" ? "Self.xyz" : "LinkedIn";
   document.getElementById("verify-more-area").innerHTML = `
     <div class="verify-more-done">&#10003; Verified with ${otherMethod}</div>
   `;
+}
+
+// ── Renew ──
+
+function setupRenew(d, expiry) {
+  const modal = document.getElementById("renew-modal");
+  const yearsSelect = document.getElementById("renew-years");
+  const summary = document.getElementById("renew-summary");
+  const domainLabel = document.getElementById("renew-domain-name");
+
+  domainLabel.textContent = d.domain;
+
+  function updateSummary() {
+    const years = parseInt(yearsSelect.value, 10);
+    const newExpiry = new Date(expiry);
+    newExpiry.setFullYear(newExpiry.getFullYear() + years);
+    summary.innerHTML = `New expiry: <strong>${newExpiry.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</strong>`;
+  }
+
+  yearsSelect.addEventListener("change", updateSummary);
+  updateSummary();
+
+  document.getElementById("renew-btn").addEventListener("click", () => {
+    modal.classList.remove("hidden");
+  });
+
+  document.getElementById("renew-backdrop").addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
+
+  document.getElementById("renew-cancel-btn").addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
+
+  document.getElementById("renew-confirm-btn").addEventListener("click", () => {
+    const years = parseInt(yearsSelect.value, 10);
+    const newExpiry = new Date(expiry);
+    newExpiry.setFullYear(newExpiry.getFullYear() + years);
+    document.getElementById("dash-expires").textContent = newExpiry.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    expiry.setFullYear(newExpiry.getFullYear());
+    modal.classList.add("hidden");
+
+    // Update sessionStorage
+    currentDomain.expiry = newExpiry.toISOString().slice(0, 10);
+    domains[domainIndex] = currentDomain;
+    sessionStorage.setItem("idcv_domains", JSON.stringify(domains));
+  });
 }
 
 // ── DNS table ──
