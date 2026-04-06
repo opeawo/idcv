@@ -1800,7 +1800,7 @@ pre.code-block {
 .manifesto {
   max-width: 720px;
   margin: 0 auto;
-  padding: 0 0 60px;
+  padding: 0 24px 60px;
 }
 
 .manifesto-hero {
